@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('MainFormApp', ['ngRoute']);//'ngRoute'
+var app = angular.module('MainFormApp', ['ngRoute']);//'ngRoute''$scope'
 //Debug -global
 var href = window.location.href;
 var g_debugMode = (href.indexOf("localhost") > -1) ? true : false;
@@ -10,13 +10,12 @@ app.factory('mainForm', function ($http, $q) {
 
     console.log("mainForm  factory");
     
-    function getElasticDetailsdata() {
+    function UploadSTLdata(stlFilename) {
         var deferred = $q.defer();
-        console.log("in getElasticDetailsdata");
+        console.log("in UploadSTLdata");
 
-        // var DataObj = getElasticHashdataServer($http, $q, numdays);
+        var DataObj = UploadSTLdataServer($http, $q,stlFilename);
 
-        // console.log("in getElasticDetailsdata");
 
 
         // var deferred = $q.defer();
@@ -28,14 +27,16 @@ app.factory('mainForm', function ($http, $q) {
     }
 
     return {     
-        getElasticDetailsdata: getElasticDetailsdata
+        UploadSTLdata: UploadSTLdata
     
     };
 });
 
-app.controller('mainFormCtrl', function ($scope, $location, mainForm) {
+app.controller('mainFormCtrl', function ($scope, mainForm) {
+    console.log("mainFormCtrl");
+    var uploadSTL = function (stlFilename) {
 
-    var updateAllDataFromServer = function () {
+        mainForm.UploadSTLdata($http, $q,stlFilename)
     /*     mainForm.getElasticHashdata(crashHashID, userDateInfo).then(function (HashData) {
             //$scope.HashData = HashData;
             //$scope.NuDups = HashData.count;
@@ -59,14 +60,41 @@ app.controller('mainFormCtrl', function ($scope, $location, mainForm) {
 
     function init() {
         console.log("in init");
-        $scope.modelData={};
+        $scope.modelData={"stlpath":"c:\\tmp\\Photoskulptur_Gutenberg.stl"};
         //updateAllDataFromServer();
     
-    }
+    };
+
+    $scope.onClick = function(stlfilename) {
+        console.log ("pressedOnClcik");
+        mainForm.UploadSTLdata(stlfilename);
+    };
 
     init();
 
 });
 
 
+function UploadSTLdataServer($http, $q, stlFileName) {
+    
+    if ('stlFileName' === typeof(userDateInfo)) { 
+        return;
+    } 
+
+    var uploadSTL_URI = g_baseurl + '/api/services/upload?file='+stlFileName; 
+    
+    //var uploadSTL_URI = g_baseurl + '/api/services/slicer/'+stlFileName;
+    $http.post(uploadSTL_URI).then(function (result) {
+        var stacks = result.data;//[];
+        
+        //deferred.resolve(result.data);
+        deferred.resolve(stacks);
+
+    }), function (error) {
+        console.log(error);
+        deferred.reject(error);
+    }
+    
+    return deferred.promise;
+}
 

@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var multer = require('multer');
 
 var multipart     = require('connect-multiparty');
 
@@ -36,12 +37,19 @@ app.get('/mainform/', mainform.setupMainForm);
 var multipartMiddleware = multipart();
 
 //globals
+var multerConfig = getMulterConfig(); //TODO bad HACK - 
 
 var auth    = (process.env.AUTH || false);
 
 // Various pseudo services
 var services = require('./server/server.js');
-app.get('/api/services/slicer', restrict, multipartMiddleware, services.Slicer);
+app.get('/api/services/slicer/:stlfile', restrict, multipartMiddleware, services.Slicer);
+app.get('/api/services/slicer/', restrict, multipartMiddleware, services.Slicer);
+
+//app.post('/api/services/upload/',multer(multerConfig).single('photo'), services.UploadSTL);
+app.post('/api/services/upload', services.UploadSTL);
+
+//app.post('/api/services/upload', restrict, multipartMiddleware,);
 
 
 // catch 404 and forward to error handler
@@ -76,5 +84,44 @@ function restrict(req, res, next) {
     next();
   }
 }
+// for file uplaoding
+function getMulterConfig (){
+
+  const multerConfig = {
+  //https://medium.com/@Moonstrasse/how-to-make-a-basic-html-form-file-upload-using-multer-in-an-express-node-js-app-16dac2476610
+  storage: multer.diskStorage({
+   //Setup where the user's file will go
+   destination: function(req, file, next){
+     next(null, './public/stlfilestorage');
+     },   
+      
+      //Then give the file a unique name
+      filename: function(req, file, next){
+          console.log(file);
+          const ext = file.mimetype.split('/')[1];
+          next(null, file.fieldname + '-' + Date.now() + '.'+ext);
+        }
+      }),   
+      
+      //A means of ensuring only images are uploaded. 
+      fileFilter: function(req, file, next){
+            if(!file){
+              next();
+            }
+          const image = file.mimetype.startsWith('image/');
+          if(image){
+            console.log('photo uploaded');
+            next(null, true);
+          }else{
+            console.log("file not supported");
+            
+            //TODO:  A better message response to user on failure.
+            return next();
+          }
+      }
+    };
+
+    return multerConfig;
+  }
 
 module.exports = app;
