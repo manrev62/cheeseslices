@@ -9,16 +9,18 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-file.js"></script>
-
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-file.js"></script>
+ -->
       <link href="mdr-angular-file/dist/mdr-file.min.css">
       <script href="mdr-angular-file/dist/mdr-file.min.js"></script>
       <script href="./node_modules/fc/fc.js"></script>
       
     <script src='./javascripts/mainform.js' type="text/javascript"></script>
+    
 
     <style>
-    #dropbox { 
+  #dropbox { 
+  width: 400px;
   border: 4px dashed #ccc; 
   padding-left: 8px;
 }
@@ -42,134 +44,132 @@
   background-color: #ff0000;
   width: 0;
 }
+body { margin: 0; }
+canvas { width: 50%; height: 50% }
+
     </style>
   </head>
     <body>
-      <div ng-app="MainFormApp" ng-controller="mainFormCtrl">
-      <!--firstController is the name of the controller function, its scope expands within this div element -->
-       <label> Enter stl file path
-        <input type="text" name="stlfile" ng-model="modelData.stlpath" required>
-      </label>
-      <button type="button" ng-click="onClick(modelData.stlpath)" >Upload STL</button>
       
-      <p>{{modelData.stlpath}}</p>
       <div id="dropbox">
-        <h1>Upload files with to Cloudinary with HTML5 file upload</h1> Learn more in this blog post - <a href="https://cloudinary.com/blog/direct_upload_made_easy_from_browser_or_mobile_app_to_the_cloud">Direct upload made easy, from browser or mobile app to the cloud</a>
-      
+        <h1>Upload your stl file into this dashed area</h1> 
+        <div></div><!--TODO - investigate why form includes other elements with out this-->
         <form class="my-form">
           <div class="form_line">
-            <h4>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</h4>
+            <h4>To upload multiple files with the file dialog use this link</h4>
             <div class="form_controls">
               <div class="upload_button_holder">
                 <input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
-                <a href="#" id="fileSelect">Select some files</a>
+                <a href="#" id="fileSelect">Upload using file browser</a>
               </div>
             </div>
           </div>
         </form>
+        </div>
+        <div id=viewContainer></div>
         <div class="progress-bar" id="progress-bar">
           <div class="progress" id="progress"></div>
         </div>
-        <div id="gallery" />
+        <div id="gallery" >
+            <p><label id="lblCompVol">vol</label></p>
+            <p><label id="lblCompWeight">weight</label></p>
+
+            <p><label type="hidden" id="custId" name="custId" value="-1"></p>
+            </div>
       </div>
+
+      <div ng-app="MainFormApp" ng-controller="mainFormCtrl">
+        <!--firstController is the name of the controller function, its scope expands within this div element -->
+         <label> Enter material
+          <input type="text" name="stlfile" ng-model="modelData.stlpath" required>
+        </label>
+        <button type="button" ng-click="onClick(modelData.stlpath)" >Get Estimate</button>
+        
+        <p>{{modelData.stlpath}}</p>
       </div>
-      
+
+      <script type="text/javascript" src="./javascripts/three.min.js"></script>
+      <script type="text/javascript" src="./javascripts/STLLoader.js"></script>
       <script>
-      const cloudName = 'Your cloud name';
-const unsignedUploadPreset = 'Your upload preset';
+      var camera, scene, renderer;
+  var geometry, material, mesh,startTime;
 
-var fileSelect = document.getElementById("fileSelect"),
-  fileElem = document.getElementById("fileElem");
+  init();
+  //animate();
 
-fileSelect.addEventListener("click", function(e) {
-  if (fileElem) {
-    fileElem.click();
+  function init() {
+    startTime = new Date().getTime();
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
+    camera.position.z = 1;
+
+    // Find the document element that will host the canvas.
+var container = document.getElementById("viewContainer");
+
+/* // Add canvas to the document element.
+renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(targetWidth, targetHeight );
+renderer.setClearColor(0xededed, 0)
+container.appendChild(renderer.domElement);
+
+// Control for pan, zoom, rotate.
+controls = new THREE.TrackballControls(camera, container);
+ */
+    scene = new THREE.Scene();
+
+    //geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+    /* material = new THREE.MeshNormalMaterial();
+
+    mesh = new THREE.Mesh( geometry, material );
+    scene.add( mesh ); */
+
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setSize( window.innerWidth/5, window.innerHeight/5 );
+    container.appendChild(renderer.domElement);
+
+    //document.body.appendChild( renderer.domElement );
+    var loader = new THREE.STLLoader ();
+    loader.load ('./javascripts/Star.stl', function (geometry) {    
+                material = new THREE.MeshNormalMaterial();//new THREE.MeshPhongMaterial( { color: 'skyblue' } );
+                mesh = new THREE.Mesh( geometry, material );
+                console.log( mesh);
+
+                scene.add( mesh );
+                animate();
+
+            } );
+
+
+
   }
-  e.preventDefault(); // prevent navigation to "#"
-}, false);
 
-// ************************ Drag and drop ***************** //
-function dragenter(e) {
-  e.stopPropagation();
-  e.preventDefault();
-}
+  function animate() {
 
-function dragover(e) {
-  e.stopPropagation();
-  e.preventDefault();
-}
+    requestAnimationFrame( animate );
 
-dropbox = document.getElementById("dropbox");
-dropbox.addEventListener("dragenter", dragenter, false);
-dropbox.addEventListener("dragover", dragover, false);
-dropbox.addEventListener("drop", drop, false);
+    mesh.rotation.x += 0.01;
+    mesh.rotation.y += 0.02;
 
-function drop(e) {
-  e.stopPropagation();
-  e.preventDefault();
+    renderer.render( scene, camera );
 
-  var dt = e.dataTransfer;
-  var files = dt.files;
-
-  handleFiles(files);
-}
-
-// *********** Upload file to Cloudinary ******************** //
-function uploadFile(file) {
-  //var url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
-
-  //var url = `http://localhost:3000/api/services/upload/`;//
-
-   var url = `http://localhost:3000/myfileupload/`;
-
-  var xhr = new XMLHttpRequest();
-  var fd = new FormData();
-  xhr.open('POST', url, true);
-  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-  // Reset the upload progress bar
-   document.getElementById('progress').style.width = 0;
-  
-  // Update progress (can be used to show progress indicator)
-  xhr.upload.addEventListener("progress", function(e) {
-    var progress = Math.round((e.loaded * 100.0) / e.total);
-    document.getElementById('progress').style.width = progress + "%";
-
-    console.log(`fileuploadprogress data.loaded: ${e.loaded},
-  data.total: ${e.total}`);
-  });
-
-  xhr.onreadystatechange = function(e) {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      // File uploaded successfully
-      var response = JSON.parse(xhr.responseText);
-      // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
-      var url = response.secure_url;
-      // Create a thumbnail of the uploaded image, with 150px width
-      var tokens = url.split('/');
-      tokens.splice(-2, 0, 'w_150,c_scale');
-      var img = new Image(); // HTML5 Constructor
-      img.src = tokens.join('/');
-      img.alt = response.public_id;
-      document.getElementById('gallery').appendChild(img);
     }
-  };
-
-  fd.append('upload_preset', unsignedUploadPreset);
-  fd.append('tags', 'browser_upload'); // Optional - add tag for image admin in Cloudinary
-  fd.append('file', file);
-  xhr.send(fd);
-}
-
-// *********** Handle selected files ******************** //
-var handleFiles = function(files) {
-  for (var i = 0; i < files.length; i++) {
-    uploadFile(files[i]); // call the function to upload the file
+function computeScreenSpaceBoundingBox(mesh, camera) {
+  var vertices = mesh.geometry.vertices;
+  var vertex = new THREE.Vector3();
+  var min = new THREE.Vector3(1);
+  var max = new THREE.Vector3(-1);
+  
+  for (var i = 0; i < vertices.length; i++) {
+  	var vertexWorldCoord = vertex.copy(vertices[i]).applyMatrix4(mesh.matrixWorld);
+    var vertexScreenSpace = vertexWorldCoord.project(camera);
+  	min.min(vertexScreenSpace);
+    max.max(vertexScreenSpace);
   }
-};
-      </script>
-
-    </div> 
+  
+  return new THREE.Box2(min, max);
+}
+  </script>
+   
+      <script src='./javascripts/drag-drop.js' type="text/javascript"></script>
  
      </body>
 </html>

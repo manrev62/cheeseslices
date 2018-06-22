@@ -53,7 +53,7 @@ exports.UploadSTL= function(request, response){
       console.log(stl.boundingBox,'(mm)');  // [60,45,50] (mm)
       console.log(stl.area,'(m)');    
 
-      var stlSlicer= require('./mesh-slice-polygon.js');
+      /* var stlSlicer= require('./mesh-slice-polygon.js');
 
       var slicer = stlSlicer();
         var stl = require('stl')
@@ -74,16 +74,16 @@ exports.UploadSTL= function(request, response){
             }));
         });
 
-        var createDropTarget = require('drop-stl-to-json');
+        var createDropTarget = require('drop-stl-to-json'); */
    /*  var fc = require('fc');
     var createSlicer = require('../mesh-slice-polygon');
     var min = Math.min;
     var max = Math.max;
    
-        var dropSlicer= require('./drop-slicer.js'); */
+    var dropSlicer= require('./drop-slicer.js'); */
 
-
-    response.send('Complete!');
+    var rtnObj= {"fileinfo":{"volume":stl.volume,"weight":stl.weight,"boundingBox":stl.boundingBox, "fileID":storedFile }}
+    response.status(200).send(rtnObj);
 
 }
 
