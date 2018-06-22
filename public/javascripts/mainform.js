@@ -70,6 +70,12 @@ app.controller('mainFormCtrl', function ($scope, mainForm) {
         mainForm.UploadSTLdata(stlfilename);
     };
 
+    $scope.handleFiles = function(files) {
+        for (var i = 0; i < files.length; i++) {
+         // uploadFile(files[i]); // call the function to upload the file
+        }
+      };
+
     init();
 
 });
@@ -81,7 +87,10 @@ function UploadSTLdataServer($http, $q, stlFileName) {
         return;
     } 
 
-    var uploadSTL_URI = g_baseurl + '/api/services/upload?file='+stlFileName; 
+   
+    //var uploadSTL_URI = g_baseurl + '/api/services/upload?file='+stlFileName; 
+
+    var uploadSTL_URI = g_baseurl + '/myfileupload'; 
     
     //var uploadSTL_URI = g_baseurl + '/api/services/slicer/'+stlFileName;
     $http.post(uploadSTL_URI).then(function (result) {

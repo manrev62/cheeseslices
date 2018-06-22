@@ -32,33 +32,56 @@ exports.Slicer = function (request, response) {
 
 exports.UploadSTL= function(request, response){
 
-    var multer = require('multer');
-    //var multerCfg=getMulterConfig();
-    var fileStl = request.query.file;
-
-    var Storage = multer.diskStorage({
-        destination: function(req, file, callback) {
-            callback(null, "./public/stlfilestorage");
-        },
-        filename: function(req, file, callback) {
-            callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
-        }
-    });
-
-    var upload = multer({storage: Storage}).single(fileStl);
-    upload(req, res, function(err) {
-        if (err) {
-            return res.end("Something went wrong!");
-        }
-        return res.end("File uploaded sucessfully!.");
-    });
+    if (!request.file) {
+        console.log("No file received");
+        return response.send({
+          success: false
+        });
     
-    //   var upload = multer({storage: Storage}).single(file), function (req, res, next) {
-    //     console.log ();
-    //     // req.file is the `avatar` file
-    //     // req.body will hold the text fields, if there were any
-    //   };
+       // https://www.npmjs.com/package/node-stl//
     
+      } 
+
+      var storedFile = request.file.filename;
+
+      var nodestl=require ('node-stl');
+
+      var localSTLFilePath=__dirname + '/../public/stlfilestorage/'+storedFile;
+      var stl = nodestl(localSTLFilePath);
+      console.log(stl.volume + 'cm^3');     // 21cm^3
+      console.log(stl.weight + 'gm');       //  1gm
+      console.log(stl.boundingBox,'(mm)');  // [60,45,50] (mm)
+      console.log(stl.area,'(m)');    
+
+      var stlSlicer= require('./mesh-slice-polygon.js');
+
+      var slicer = stlSlicer();
+        var stl = require('stl')
+        var fs = require('fs');
+
+        fs.createReadStream(localSTLFilePath)
+        .pipe(stl.createParseStream())
+        .on('data', function(obj) {
+            // add an array of vertices
+            // [[x, y, z], [x, y, z], [x,y,z]]
+            //if (obj && obj.verts) console.log('verts'+obj.verts);
+            obj && obj.verts && slicer.addTriangle(obj.verts)
+        })
+        .on('end', function() {
+            // slize at z=0
+            console.log(slicer.slice(0).map(function(polygon) {
+            return polygon.points;
+            }));
+        });
+
+        var createDropTarget = require('drop-stl-to-json');
+   /*  var fc = require('fc');
+    var createSlicer = require('../mesh-slice-polygon');
+    var min = Math.min;
+    var max = Math.max;
+   
+        var dropSlicer= require('./drop-slicer.js'); */
+
 
     response.send('Complete!');
 
@@ -87,7 +110,7 @@ function getMulterConfig (){
               if(!file){
                 next();
               }
-            const image = file.mimetype.startsWith('image/');
+            const image = file.mimetype.startsWith('*/');
             if(image){
               console.log('photo uploaded');
               next(null, true);

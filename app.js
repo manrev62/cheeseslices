@@ -47,10 +47,12 @@ app.get('/api/services/slicer/:stlfile', restrict, multipartMiddleware, services
 app.get('/api/services/slicer/', restrict, multipartMiddleware, services.Slicer);
 
 //app.post('/api/services/upload/',multer(multerConfig).single('photo'), services.UploadSTL);
-app.post('/api/services/upload', services.UploadSTL);
+app.post('/api/services/upload/', services.UploadSTL);
 
+var multer = require('multer');
+var upload = multer(getMulterConfig());
 //app.post('/api/services/upload', restrict, multipartMiddleware,);
-
+app.post('/myfileupload/', upload.single('file'), services.UploadSTL);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -108,7 +110,7 @@ function getMulterConfig (){
             if(!file){
               next();
             }
-          const image = file.mimetype.startsWith('image/');
+          const image = true;//file.mimetype.startsWith('image/');
           if(image){
             console.log('photo uploaded');
             next(null, true);
