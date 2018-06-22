@@ -59,7 +59,7 @@ canvas { width: 50%; height: 50% }
   background-color: #2e353d;
   position: fixed;
   top: 0px;
-  width: 400px;
+  width: 50%;
   height: 100%;
   color: #e1ffff;
 }
@@ -245,6 +245,7 @@ canvas { width: 50%; height: 50% }
                         </form>
                         </div>
                         <div id=viewContainer></div>
+
                         <div class="progress-bar" id="progress-bar">
                           <div class="progress" id="progress"></div>
                         </div>
@@ -391,8 +392,17 @@ controls.update(); */
     container.appendChild(renderer.domElement);
 
     //document.body.appendChild( renderer.domElement );
-    var loader = new THREE.STLLoader ();
-    loader.load ('./javascripts/Star.stl', function (geometry) {    
+    var loader = new THREE.STLLoader ();//stlfilestorage/file-1529695863503.octet-stream
+    var custId = document.getElementById("custId"); 
+    if (custId.innerText==="")
+    {
+      return;
+
+    }
+    var file='./stlfilestorage/'+custId.innerText;
+
+    //loader.load ('./javascripts/Star.stl', function (geometry) {
+    loader.load (file, function (geometry) {    
                 material = new THREE.MeshNormalMaterial();//new THREE.MeshPhongMaterial( { color: 'skyblue' } );
                 mesh = new THREE.Mesh( geometry, material );
                 console.log( mesh);
@@ -416,21 +426,6 @@ controls.update(); */
     renderer.render( scene, camera );
 
     }
-function computeScreenSpaceBoundingBox(mesh, camera) {
-  var vertices = mesh.geometry.vertices;
-  var vertex = new THREE.Vector3();
-  var min = new THREE.Vector3(1);
-  var max = new THREE.Vector3(-1);
-  
-  for (var i = 0; i < vertices.length; i++) {
-  	var vertexWorldCoord = vertex.copy(vertices[i]).applyMatrix4(mesh.matrixWorld);
-    var vertexScreenSpace = vertexWorldCoord.project(camera);
-  	min.min(vertexScreenSpace);
-    max.max(vertexScreenSpace);
-  }
-  
-  return new THREE.Box2(min, max);
-}
   </script>
    
       <script src='./javascripts/drag-drop.js' type="text/javascript"></script>

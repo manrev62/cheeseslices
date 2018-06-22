@@ -77,10 +77,10 @@ function uploadFile(file) {
       document.getElementById('lblCompVol').innerHTML =' The component Volume is ' +response.fileinfo.volume;
       document.getElementById('lblCompWeight').innerHTML =' The component Weight is ' +response.fileinfo.weight;
       document.getElementById('custId').innerHTML =response.fileinfo.fileID;
-
-      
-
-      storedFile
+      var custId = document.getElementById("custId"); 
+      custId.innerText==response.fileinfo.fileID;
+      var container = document.getElementById("viewContainer");
+      init();
     }
   };
 
