@@ -18,7 +18,8 @@
     <script src='./javascripts/mainform.js' type="text/javascript"></script>
 
     <style>
-    #dropbox { 
+  #dropbox { 
+  width: 400px;
   border: 4px dashed #ccc; 
   padding-left: 8px;
 }
@@ -45,34 +46,38 @@
     </style>
   </head>
     <body>
-      <div ng-app="MainFormApp" ng-controller="mainFormCtrl">
-      <!--firstController is the name of the controller function, its scope expands within this div element -->
-       <label> Enter stl file path
-        <input type="text" name="stlfile" ng-model="modelData.stlpath" required>
-      </label>
-      <button type="button" ng-click="onClick(modelData.stlpath)" >Upload STL</button>
       
-      <p>{{modelData.stlpath}}</p>
       <div id="dropbox">
-        <h1>Upload files with to Cloudinary with HTML5 file upload</h1> Learn more in this blog post - <a href="https://cloudinary.com/blog/direct_upload_made_easy_from_browser_or_mobile_app_to_the_cloud">Direct upload made easy, from browser or mobile app to the cloud</a>
-      
+        <h1>Upload your stl file into this dashed area</h1> 
+        <div></div><!--TODO - investigate why form includes other elements with out this-->
         <form class="my-form">
           <div class="form_line">
-            <h4>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</h4>
+            <h4>To upload multiple files with the file dialog use this link</h4>
             <div class="form_controls">
               <div class="upload_button_holder">
                 <input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
-                <a href="#" id="fileSelect">Select some files</a>
+                <a href="#" id="fileSelect">Upload using file browser</a>
               </div>
             </div>
           </div>
         </form>
+        </div>
         <div class="progress-bar" id="progress-bar">
           <div class="progress" id="progress"></div>
         </div>
         <div id="gallery" />
       </div>
+
+      <div ng-app="MainFormApp" ng-controller="mainFormCtrl">
+        <!--firstController is the name of the controller function, its scope expands within this div element -->
+         <label> Enter stl file path
+          <input type="text" name="stlfile" ng-model="modelData.stlpath" required>
+        </label>
+        <button type="button" ng-click="onClick(modelData.stlpath)" >Upload STL</button>
+        
+        <p>{{modelData.stlpath}}</p>
       </div>
+   
       
       <script>
       const cloudName = 'Your cloud name';
@@ -169,7 +174,7 @@ var handleFiles = function(files) {
 };
       </script>
 
-    </div> 
+ 
  
      </body>
 </html>
