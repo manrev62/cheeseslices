@@ -42,7 +42,7 @@ function drop(e) {
 function uploadFile(file) {
   
   var url = g_baseurl +`/myfileupload/`;//http://cheeseslicer.eu-4.evennode.com `http://localhost:3000/myfileupload/
-
+  console.log ('Post - '+url);
   var xhr = new XMLHttpRequest();
   var fd = new FormData();
   xhr.open('POST', url, true);

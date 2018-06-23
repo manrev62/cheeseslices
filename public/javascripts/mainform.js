@@ -142,7 +142,7 @@ function UploadSTLdataServer($http, $q, stlFileName) {
     } 
 
     var uploadSTL_URI = g_baseurl + '/myfileupload'; 
-    
+    console.log ('Post - '+uploadSTL_URI);
     $http.post(uploadSTL_URI).then(function (result) {
         var stuff = result.data;//[];
         
@@ -180,7 +180,7 @@ var suppliersRtn=getsuppliers(suppliers,material);//cheat
  //bbox[0]*bbox[1]*bbox[2];
 
  var comVol=document.getElementById('lblCompVolTxt').innerText;//internal
- var supplierName= comVol * suppliersRtn.suppliers[0].name;
+ var supplierName= suppliersRtn.suppliers[0].name;
  var rawpartcost= comVol * suppliersRtn.suppliers[0].cost*nucopies;
  var addtionalCosts= 0.2*rawpartcost;
 
