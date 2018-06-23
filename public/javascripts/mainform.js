@@ -4,7 +4,7 @@ var app = angular.module('MainFormApp', ['ngRoute']);//'ngRoute''$scope'
 //Debug -global
 var href = window.location.href;
 var g_debugMode = (href.indexOf("localhost") > -1) ? true : false;
-var g_baseurl = (g_debugMode == false) ? "http://cheeseslicer.eu-4.evennode.com/" : "http://localhost:3000";
+var g_baseurl = (g_debugMode == false) ? "http://cheeseslicer.eu-4.evennode.com" : "http://localhost:3000";
 //--
 app.factory('mainForm', function ($http, $q) {
 
