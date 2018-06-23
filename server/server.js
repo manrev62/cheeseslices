@@ -113,7 +113,7 @@ function getMulterConfig (){
               }
             const image = file.mimetype.startsWith('*/');
             if(image){
-              console.log('photo uploaded');
+              console.log('file uploaded');
               next(null, true);
             }else{
               console.log("file not supported");
