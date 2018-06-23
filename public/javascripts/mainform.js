@@ -116,9 +116,15 @@ app.controller('mainFormCtrl', function ($scope, mainForm) {
 
             var mat=$scope.selectedMaterial;
             var nucopies=$scope.NuCopies;
-            var suppliers = mainForm.getQuoteServer(mat,nucopies.text);
+            //var suppliers = 
+            mainForm.getQuoteServer(mat,nucopies.text).then(function (suppliers) {
+                $scope.suppliers=suppliers;
+                // does nothing - could return OK?
+            }, function (error) {
+                console.log(error);
+            });
 
-            $scope.suppliers=suppliers;
+            //$scope.suppliers=suppliers;
         }
 
     };
@@ -186,7 +192,8 @@ var suppliersRtn=getsuppliers(suppliers,material);//cheat
 
  var total= (rawpartcost+addtionalCosts)*1.15
 
-var rtnObj = {"partcost":total/nucopies, "totalcost":total}
+var rtnObj = {"partcost":total/nucopies, "totalcost":total};
+return rtnObj;
 }
 
 var getsuppliers=function(suppliers,material){
