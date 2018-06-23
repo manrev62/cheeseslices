@@ -126,3 +126,34 @@ function getMulterConfig (){
   
     return multerConfig;
 }
+// microservices
+
+//'database'
+      var suppliers={};
+      suppliers.ukcom={"name":"ukcom","materials":[{'type':'Titanium','cost':'3.65'},{'type':'Plastic','cost':'7.10'}]};
+      suppliers.chinacom={"name":"chinacom","materials":[{'type':'Titanium','cost':'3.9'},{'type':'Plastic','cost':'6.05'},{'type':'Nylon','cost':'60.1'}]};
+      suppliers.skoreacom={"name":"skoreacom","materials":[{'type':'Plastic','cost':'7.10'}]};
+
+exports.getSuppliers= function(request, response){
+      var material = request.params.material;
+      /*var suppliers={};
+      suppliers.ukcom={"name":"ukcom","materials":['Titanium','Plastic']};
+      suppliers.chinacom={"name":"chinacom","materials":['Titanium','Plastic','Nylon']};
+      suppliers.skoreacom={"name":"skoreacom","materials":['Plastic']};
+ */
+    var rtnObj= {"suppliers":[suppliers.ukcom,suppliers.chinacom]}
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.status(200).send(rtnObj);
+}
+exports.quoteForModel= function(request, response){
+///ms/services/supplier/:supplier/partcost/number/:number/model/:model/materal/:material
+var material = request.params.supplier;
+var number = request.params.number;
+var model = request.params.model;
+var material = request.params.material;
+
+    var rtnObj= {"suppliers":[suppliers.ukcom,suppliers.chinacom]}
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.status(200).send(rtnObj);
+}
+

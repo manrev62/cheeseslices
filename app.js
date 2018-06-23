@@ -54,6 +54,12 @@ var upload = multer(getMulterConfig());
 //app.post('/api/services/upload', restrict, multipartMiddleware,);
 app.post('/myfileupload/', upload.single('file'), services.UploadSTL);
 
+
+// Microservices
+
+app.get('/ms/services/suppliers/material/:material', restrict, multipartMiddleware, services.getSuppliers);
+app.get('/ms/services/supplier/:supplier/partcost/number/:number/model/:model/material/:material', restrict, multipartMiddleware, services.quoteForModel);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -41,7 +41,7 @@ function drop(e) {
 // *********** Upload file to server ******************** //
 function uploadFile(file) {
   
-  var url = g_baseurl +`/myfileupload/`;http://cheeseslicer.eu-4.evennode.com `http://localhost:3000/myfileupload/
+  var url = g_baseurl +`/myfileupload/`;//http://cheeseslicer.eu-4.evennode.com `http://localhost:3000/myfileupload/
 
   var xhr = new XMLHttpRequest();
   var fd = new FormData();
@@ -73,12 +73,19 @@ function uploadFile(file) {
     //   img.src = tokens.join('/');
     //   img.alt = response.public_id;
     //   document.getElementById('gallery').appendChild(img);
-
-      document.getElementById('lblCompVol').innerHTML =' The component Volume is ' +response.fileinfo.volume;
-      document.getElementById('lblCompWeight').innerHTML =' The component Weight is ' +response.fileinfo.weight;
-      document.getElementById('custId').innerHTML =response.fileinfo.fileID;
-      var custId = document.getElementById("custId"); 
-      custId.innerText==response.fileinfo.fileID;
+      var volStr=response.fileinfo.volume;
+      var vol=volStr.toFixed(3); 
+      var bbox=response.fileinfo.boundingBox; 
+      document.getElementById('lblCompVol').innerHTML =' Component Volume is ' +vol + ' cm3';
+      document.getElementById('lblCompVolTxt').innerHTML =vol;
+      document.getElementById('lboundingBoxTxt').innerHTML =bbox;
+      //document.getElementById('lblCompWeight').innerHTML =' The component Weight is ' +response.fileinfo.weight;
+      var iHTML=document.getElementById('custId');
+      if (iHTML){
+        iHTML.innerHTML=response.fileinfo.fileID;
+      }
+      //var custId = document.getElementById("custId"); 
+      //custId.innerText==response.fileinfo.fileID;
       var container = document.getElementById("viewContainer");
       init();
     }

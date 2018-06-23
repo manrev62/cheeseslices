@@ -30,10 +30,10 @@
 .my-form {
   margin-top: 10px;
 }
-.gallery {
+.prelimdata {
   margin: 10px;
 }
-.gallery img {
+.prelimdata img {
   margin-left: 16px;
 }
 .progress-bar{
@@ -249,12 +249,15 @@ canvas { width: 50%; height: 50% }
                         <div class="progress-bar" id="progress-bar">
                           <div class="progress" id="progress"></div>
                         </div>
-                        <div id="gallery" >
-                            <p><label id="lblCompVol">vol</label></p>
-                            <p><label id="lblCompWeight">weight</label></p>
+                        <p></p>
+                        <div id="prelimdata" >
+                            <p><label id="lblCompVol">  </label></p>
+                            <div id=lblCompVolTxt></div>
+                            <div id=lboundingBoxTxt></div>
+                            <!-- <p><label id="lblCompWeight">Weight</label></p> -->
                 
                             <p><label type="hidden" id="custId" name="custId" value="-1"></p>
-                            </div>
+                        </div>
                       </li>
                     
                 </ul>
@@ -263,18 +266,29 @@ canvas { width: 50%; height: 50% }
                 <li  data-toggle="collapse" data-target="#quote" class="collapsed">
                     <a href="#"><i class="fa fa-star fa-lg"></i> Get a Quote <span class="arrow"></span></a>
                   </li>
+                  <!-- see https://angular-ui.github.io/bootstrap/ consider angular material-->
                 <ul class="sub-menu collapse" id="quote">
-                      <li> <div ng-app="MainFormApp" ng-controller="mainFormCtrl">
-                          <!--firstController is the name of the controller function, its scope expands within this div element -->
-                           <label> Enter material
-                            <input type="text" name="stlfile" ng-model="modelData.stlpath" required>
-                          </label>
-                          <button type="button" ng-click="onClick(modelData.stlpath)" >Get Estimate</button>
-                          
-                          <p>{{modelData.stlpath}}</p>
-                        </div></a></li>
-                    
+                    <form class="form-inline">         
+                    <li> <div ng-app="MainFormApp" ng-controller="mainFormCtrl">
+                        <!--firstController is the name of the controller function, its scope expands within this div element -->
+                         <div> Choose options
+                            <select class="btn btn-primary dropdown-toggle" name="Material" ng-model="selectedMaterial" ng-options="x for x in materials">
+                                <option value="">-Select Material-</option> 
+                            </select>Number of Copies
+                            <input class="form-control" type="text" name="input" ng-model="NuCopies.text" ng-pattern="NuCopies.word" required ng-trim="false"  style="width:70px;"></input>
+                            Required By
+                            <input class="form-control" type="text" name="input" ng-model="reqDate.text" ng-pattern="reqDate.word" required ng-trim="false"  style="width:120px;"></input>
+                            <input class="form-control" type="text" name="input" ng-model="model" style="width:120px;"></input>
+                            <button class="btn-primary" type="button" ng-click="onClick('getEstimate')" >Get Estimate</button>
+                            <p>{{suppliers}}</p>
+                          </div>
+                    </li>
+                  </form>
+               
                 </ul>
+               
+               
+              
                 
                 <li  data-toggle="collapse" data-target="#projects" class="collapsed active">
                   <a href="#"><i class="fa fa-star fa-lg"></i>Your Projects <span class="arrow"></span></a>
