@@ -41,7 +41,7 @@ function drop(e) {
 // *********** Upload file to server ******************** //
 function uploadFile(file) {
   
-  var url = `http://localhost:3000/myfileupload/`;
+  var url = g_baseurl +`/myfileupload/`;http://cheeseslicer.eu-4.evennode.com `http://localhost:3000/myfileupload/
 
   var xhr = new XMLHttpRequest();
   var fd = new FormData();
