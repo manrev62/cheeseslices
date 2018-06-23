@@ -83,6 +83,7 @@ exports.UploadSTL= function(request, response){
     var dropSlicer= require('./drop-slicer.js'); */
 
     var rtnObj= {"fileinfo":{"volume":stl.volume,"weight":stl.weight,"boundingBox":stl.boundingBox, "fileID":storedFile }}
+    response.setHeader('Access-Control-Allow-Origin', '*');
     response.status(200).send(rtnObj);
 
 }
