@@ -167,33 +167,39 @@ var calcQuoteCheat= function(suppliersName,nucopies,myModel,material){
 // Need 
 //i) Material cost 
 // ii) material used
-var suppliers={};
-suppliers.ukcom={"name":"ukcom","materials":[{'type':'Titanium','cost':'3.65'},{'type':'Plastic','cost':'7.10'}]};
-suppliers.chinacom={"name":"chinacom","materials":[{'type':'Titanium','cost':'3.9'},{'type':'Plastic','cost':'6.05'},{'type':'Nylon','cost':'60.1'}]};
-suppliers.skoreacom={"name":"skoreacom","materials":[{'type':'Plastic','cost':'7.10'}]};
+    var suppliers={};
+    suppliers.ukcom={"name":"ukcom","materials":[{'type':'Titanium','cost':'3.65'},{'type':'Plastic','cost':'7.10'}]};
+    suppliers.chinacom={"name":"chinacom","materials":[{'type':'Titanium','cost':'3.9'},{'type':'Plastic','cost':'6.05'},{'type':'Nylon','cost':'60.1'}]};
+    suppliers.skoreacom={"name":"skoreacom","materials":[{'type':'Plastic','cost':'7.10'}]};
 
-//Get list of supplier who can manufacture - 
-var suppliersRtn=getsuppliers(suppliers,material);//cheat
- var comVol=document.getElementById('lblCompVolTxt').innerText;//internal
- var bbox = document.getElementById('lboundingBoxTxt').innerText;
+    //Get list of supplier who can manufacture - 
+    var suppliersRtn=getsuppliers(suppliers,material);//cheat
+    var comVol=document.getElementById('lblCompVolTxt').innerText;//internal
+    var bbox = document.getElementById('lboundingBoxTxt').innerText;
 
- var res = bbox.split(","); 
- var bboxX=  Number(bbox[0]);
- var bboxY=  Number(bbox[1]);
- var bboxZ=  Number(bbox[2]);
- var bboxZ=  bbox[2];
- var bboxVol=res[0]*res[1]*res[2]
- //bbox[0]*bbox[1]*bbox[2];
+    var res = bbox.split(","); 
+    var bboxX=  Number(bbox[0]);
+    var bboxY=  Number(bbox[1]);
+    var bboxZ=  Number(bbox[2]);
+    var bboxZ=  bbox[2];
+    var bboxVol=res[0]*res[1]*res[2]
+    //bbox[0]*bbox[1]*bbox[2];
 
- var comVol=document.getElementById('lblCompVolTxt').innerText;//internal
- var supplierName= suppliersRtn.suppliers[0].name;
- var rawpartcost= comVol * suppliersRtn.suppliers[0].cost*nucopies;
- var addtionalCosts= 0.2*rawpartcost;
+    var comVol=document.getElementById('lblCompVolTxt').innerText;//internal
+    var supplierName= suppliersRtn.suppliers[0].name;
+    var rawpartcost= comVol * suppliersRtn.suppliers[0].cost*nucopies;
+    var addtionalCosts= 0.2*rawpartcost;
 
- var total= (rawpartcost+addtionalCosts)*1.15
+    var total= (rawpartcost+addtionalCosts)*1.15
 
-var rtnObj = {"partcost":total/nucopies, "totalcost":total};
-return rtnObj;
+    var supplierUKcom={"name":'ukcom'}
+
+    var rtnObj = {'supplierOuotes':[
+        {'name':'ukcom',"partcost":total/nucopies, "totalcost":total},
+        {'name':'skcom',"partcost":total/nucopies, "totalcost":total}
+        ]};
+
+    return rtnObj;
 }
 
 var getsuppliers=function(suppliers,material){

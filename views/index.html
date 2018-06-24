@@ -194,6 +194,19 @@ canvas { width: 50%; height: 50% }
 }
 
 </style>
+<style>
+    table, th , td  {
+      border: 1px solid grey;
+      border-collapse: collapse;
+      padding: 5px;
+    }
+    table tr:nth-child(odd) {
+      background-color: #f1f1f1;
+    }
+    table tr:nth-child(even) {
+      background-color: #ffffff;
+    }
+    </style>
   </head>
     <body>
 
@@ -237,7 +250,7 @@ canvas { width: 50%; height: 50% }
                             <h5>To upload multiple files with the file dialog use this link</h5>
                             <div class="form_controls">
                               <div class="upload_button_holder">
-                                <input type="file" id="fileElem" multiple accept="/*" style="display:none" onchange="handleFiles(this.files)">
+                                <input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
                                 <a href="#" id="fileSelect">Upload using file browser</a>
                               </div>
                             </div>
@@ -280,7 +293,17 @@ canvas { width: 50%; height: 50% }
                             <input class="form-control" type="text" name="input" ng-model="reqDate.text" ng-pattern="reqDate.word" required ng-trim="false"  style="width:120px;"></input>
                             
                             <button class="btn-primary" type="button" ng-click="onClick('getEstimate')" >Get Estimate</button>
-                            <p>{{suppliers}}</p>
+                            <!-- <p>{{suppliers}}</p> -->
+                            <table>
+                                <th>Suppplier</th><th>Suppplier</th><th>Suppplier</th>
+                                  <tr ng-repeat="supplier in suppliers.supplierOuotes">
+                                    <td>{{ supplier.name }}</td>
+                                    <td>{{ supplier.partcost }}</td>
+                                    <td>{{ supplier.totalcost }}</td>
+                                  </tr>
+                                </table>
+                                
+
                           </div>
                     </li>
                   </form>
