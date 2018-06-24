@@ -432,7 +432,7 @@ controls.update(); */
     scene.add( mesh ); */
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setSize( window.innerWidth, window.innerHeight/5 );
+    renderer.setSize( window.innerWidth/4, window.innerHeight/5 );
     container.appendChild(renderer.domElement);
 
     //document.body.appendChild( renderer.domElement );
@@ -480,7 +480,7 @@ mesh.rotateOnAxis(axis,rad); */
       camera.position.z=r*Math.sin(timer);
       //camera.lookAt(scene.position);
       renderer.render(scene, camera);
-      renderer.setClearColor(0xf5f5f5, 1);
+      //renderer.setClearColor(0xf5f5f5, 1);
       }
 
   </script>
