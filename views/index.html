@@ -201,10 +201,10 @@ canvas { width: 50%; height: 50% }
       padding: 5px;
     }
     table tr:nth-child(odd) {
-      background-color: #f1f1f1;
+      background-color: #2e2929;
     }
     table tr:nth-child(even) {
-      background-color: #ffffff;
+      background-color: #cfcfcf;
     }
     </style>
   </head>
@@ -294,15 +294,18 @@ canvas { width: 50%; height: 50% }
                             
                             <button class="btn-primary" type="button" ng-click="onClick('getEstimate')" >Get Estimate</button>
                             <!-- <p>{{suppliers}}</p> -->
-                            <table>
-                                <th>Suppplier</th><th>Suppplier</th><th>Suppplier</th>
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>    
+                                    <th>Supplier</th><th>Part cost (euro)</th><th>Total order price(euro)</th>
+                                    </tr>
+                                </thead>
                                   <tr ng-repeat="supplier in suppliers.supplierOuotes">
                                     <td>{{ supplier.name }}</td>
                                     <td>{{ supplier.partcost }}</td>
                                     <td>{{ supplier.totalcost }}</td>
                                   </tr>
                                 </table>
-                                
 
                           </div>
                     </li>
@@ -392,6 +395,9 @@ canvas { width: 50%; height: 50% }
       var camera, scene, renderer;
   var geometry, material, mesh,startTime,controls;
 
+  var rad=0.0;
+  var radIncrement=0.1;
+
   //init();
   //animate();
 
@@ -399,6 +405,7 @@ canvas { width: 50%; height: 50% }
     startTime = new Date().getTime();
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
     camera.position.z = 1;
+    camera.position.set(-100,0,0);
 
     // Find the document element that will host the canvas.
     var container = document.getElementById("viewContainer");
@@ -425,7 +432,7 @@ controls.update(); */
     scene.add( mesh ); */
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setSize( window.innerWidth/5, window.innerHeight/5 );
+    renderer.setSize( window.innerWidth, window.innerHeight/5 );
     container.appendChild(renderer.domElement);
 
     //document.body.appendChild( renderer.domElement );
@@ -448,9 +455,6 @@ controls.update(); */
                 animate();
 
             } );
-
-
-
   }
 
   function animate() {
@@ -460,9 +464,25 @@ controls.update(); */
     mesh.rotation.x += 0.01;
     mesh.rotation.y += 0.02;
 
-    renderer.render( scene, camera );
+    //declared once at the top of your code
+/* var axis = new THREE.Vector3(0.5,0.5,0);//tilted a bit on x and y - feel free to plug your different axis here
+//in your update/draw function
+rad += radIncrement;
+mesh.rotateOnAxis(axis,rad); */
+   render();
+    //renderer.render( scene, camera );
 
     }
+    function render(){
+      var timer=Date.now() * 0.0005;
+      r=150;
+      camera.position.x=r*Math.cos(timer);
+      camera.position.z=r*Math.sin(timer);
+      //camera.lookAt(scene.position);
+      renderer.render(scene, camera);
+      renderer.setClearColor(0xf5f5f5, 1);
+      }
+
   </script>
    
       <script src='./javascripts/drag-drop.js' type="text/javascript"></script>

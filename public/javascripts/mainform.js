@@ -195,8 +195,8 @@ var calcQuoteCheat= function(suppliersName,nucopies,myModel,material){
     var supplierUKcom={"name":'ukcom'}
 
     var rtnObj = {'supplierOuotes':[
-        {'name':'ukcom',"partcost":total/nucopies, "totalcost":total},
-        {'name':'skcom',"partcost":total/nucopies, "totalcost":total}
+        {'name':'ukcom',"partcost":total/nucopies, "totalcost":total.toFixed(2)},
+        {'name':'skcom',"partcost":total/nucopies, "totalcost":total.toFixed(2)}
         ]};
 
     return rtnObj;
